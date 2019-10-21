@@ -38,7 +38,7 @@ warnings.filterwarnings('ignore')
 
 cmap = plt.get_cmap('inferno')
 
-data = pd.read_csv('data.csv')
+data = pd.read_csv('../data.csv')
 data.head()
             
 # data.shape
