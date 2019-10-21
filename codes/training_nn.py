@@ -3,7 +3,7 @@
 """
 Created on Mon Oct 14 10:03:55 2019
 
-@author: Pedro
+@author: Pedro, Rodrigo, Alix
 """
 
 #!/usr/bin/env python3
