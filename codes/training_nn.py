@@ -14,7 +14,6 @@ Created on Mon Oct 14 09:09:46 2019
 @author: Pedro
 """
 
-# feature extractoring and preprocessing data
 import librosa
 import pandas as pd
 import numpy as np
@@ -29,7 +28,7 @@ import csv
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-#Keras
+# Keras
 from keras import models
 from keras import layers
 
@@ -41,7 +40,7 @@ cmap = plt.get_cmap('inferno')
 data = pd.read_csv('../data.csv')
 data.head()
             
-# data.shape
+#data.shape
 
 # Dropping unneccesary columns
 data = data.drop(['filename'],axis=1)
@@ -61,27 +60,27 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # X_train[10]
 
-model = models.Sequential()
-model.add(layers.Dense(256, activation='relu', input_shape=(X_train.shape[1],)))
-
-model.add(layers.Dense(128, activation='relu'))
-
-model.add(layers.Dense(64, activation='relu'))
-
-model.add(layers.Dense(10, activation='softmax'))
-
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
-
-history = model.fit(X_train,
-                    y_train,
-                    epochs=20,
-                    batch_size=128)
-
-test_loss, test_acc = model.evaluate(X_test,y_test)
-
-print('test_acc: ',test_acc)
+#model = models.Sequential()
+#model.add(layers.Dense(256, activation='relu', input_shape=(X_train.shape[1],)))
+#
+#model.add(layers.Dense(128, activation='relu'))
+#
+#model.add(layers.Dense(64, activation='relu'))
+#
+#model.add(layers.Dense(10, activation='softmax'))
+#
+#model.compile(optimizer='adam',
+#              loss='sparse_categorical_crossentropy',
+#              metrics=['accuracy'])
+#
+#history = model.fit(X_train,
+#                    y_train,
+#                    epochs=20,
+#                    batch_size=128)
+#
+#test_loss, test_acc = model.evaluate(X_test,y_test)
+#
+#print('test_acc: ',test_acc)
 
 x_val = X_train[:200]
 partial_x_train = X_train[200:]
@@ -100,17 +99,35 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(partial_x_train,
-          partial_y_train,
-          epochs=30,
-          batch_size=512,
-          validation_data=(x_val, y_val))
+history = model.fit(partial_x_train,
+                    partial_y_train,
+                    epochs=30,
+                    batch_size=512,
+                    validation_data=(x_val, y_val))
 results = model.evaluate(X_test, y_test)
 
-predictions = model.predict(X_test)
+# Plot training & validation accuracy values
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
-print(predictions[0].shape)
+# Plot training & validation loss values
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
-print(np.sum(predictions[0]))
-
-print(np.argmax(predictions[0]))
+#predictions = model.predict(X_test)
+#
+#print(predictions[0].shape)
+#
+#print(np.sum(predictions[0]))
+#
+#print(np.argmax(predictions[0]))
