@@ -3,7 +3,7 @@
 """
 Created on Mon Oct 14 09:09:46 2019
 
-@author: Pedro
+@author: Pedro, Rodrigo, Alix
 """
 
 # feature extractoring and preprocessing data
