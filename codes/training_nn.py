@@ -15,7 +15,8 @@ import os
 from PIL import Image
 import pathlib
 import csv
-
+import tensorflow as tf
+import random
 # Preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -23,13 +24,18 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 # Keras
 from keras import models
 from keras import layers
+from keras import optimizers
 
 import warnings
 warnings.filterwarnings('ignore')
 
-cmap = plt.get_cmap('inferno')
+#Seeds Initialization to reproduce results!
+seed_init = 20
+tf.set_random_seed(seed_init)
+np.random.seed(seed_init)
+random.seed(seed_init)
 
-data = pd.read_csv('../data.csv')
+data = pd.read_csv('../data_feat.csv')
 data.head()
             
 #data.shape
@@ -46,55 +52,31 @@ X = scaler.fit_transform(np.array(data.iloc[:, :-1], dtype = float))
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-# len(y_train)
+x_val = X_train[:int(0.2*np.size(data,0))]
+partial_x_train = X_train[int(0.2*np.size(data,0)):]
 
-# len(y_test)
+y_val = y_train[:int(0.2*np.size(data,0))]
+partial_y_train = y_train[int(0.2*np.size(data,0)):]
 
-# X_train[10]
-
-#model = models.Sequential()
-#model.add(layers.Dense(256, activation='relu', input_shape=(X_train.shape[1],)))
-#
-#model.add(layers.Dense(128, activation='relu'))
-#
-#model.add(layers.Dense(64, activation='relu'))
-#
-#model.add(layers.Dense(10, activation='softmax'))
-#
-#model.compile(optimizer='adam',
-#              loss='sparse_categorical_crossentropy',
-#              metrics=['accuracy'])
-#
-#history = model.fit(X_train,
-#                    y_train,
-#                    epochs=20,
-#                    batch_size=128)
-#
-#test_loss, test_acc = model.evaluate(X_test,y_test)
-#
-#print('test_acc: ',test_acc)
-
-x_val = X_train[:200]
-partial_x_train = X_train[200:]
-
-y_val = y_train[:200]
-partial_y_train = y_train[200:]
+n_classes = len(np.unique(y_train))
 
 model = models.Sequential()
 model.add(layers.Dense(512, activation='relu', input_shape=(X_train.shape[1],)))
-model.add(layers.Dense(256, activation='relu'))
-model.add(layers.Dense(128, activation='relu'))
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dense(10, activation='softmax'))
+#model.add(layers.Dense(256, activation='relu'))
+#model.add(layers.Dense(128, activation='relu'))
+#model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(n_classes, activation='softmax'))
 
-model.compile(optimizer='adam',
+opt = optimizers.Adam(lr = 0.0001, beta_1 = 0.9, beta_2 = 0.999, amsgrad = False)
+
+model.compile(optimizer=opt,
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 history = model.fit(partial_x_train,
                     partial_y_train,
-                    epochs=30,
-                    batch_size=512,
+                    epochs=20,
+                    batch_size=32,
                     validation_data=(x_val, y_val))
 
 results = model.evaluate(X_test, y_test)
