@@ -96,6 +96,7 @@ history = model.fit(partial_x_train,
                     epochs=30,
                     batch_size=512,
                     validation_data=(x_val, y_val))
+
 results = model.evaluate(X_test, y_test)
 
 # Plot training & validation accuracy values

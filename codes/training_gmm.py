@@ -79,25 +79,11 @@ def make_ellipses(gmm, ax):
         ax.add_artist(ell)
         ax.set_aspect('equal', 'datalim')
 
-#iris = datasets.load_iris()
-#
-## Break up the dataset into non-overlapping training (75%) and testing
-## (25%) sets.
-#skf = StratifiedKFold(n_splits=4)
-## Only take the first fold.
-#train_index, test_index = next(iter(skf.split(iris.data, iris.target)))
-#
-#
-#X_train = iris.data[train_index]
-#y_train = iris.target[train_index]
-#X_test = iris.data[test_index]
-#y_test = iris.target[test_index]
-
 n_classes = len(np.unique(y_train))
 
 # Try GMMs using different types of covariances.
 estimators = {cov_type: GaussianMixture(n_components=n_classes,
-              covariance_type=cov_type, max_iter=20, random_state=0)
+              covariance_type=cov_type, max_iter=100, random_state=0)
               for cov_type in ['spherical', 'diag', 'tied', 'full']}
 
 n_estimators = len(estimators)
