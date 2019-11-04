@@ -64,7 +64,12 @@ n_classes = len(np.unique(y_train))
 # Try GMMs using different types of covariances.
 estimators = {cov_type: GaussianMixture(n_components=n_classes,
               covariance_type=cov_type, max_iter=20, random_state=0)
-              for cov_type in ['spherical', 'diag', 'full']}
+              for cov_type in ['diag', 'full']}
+
+#Spherical = variance is the same along all axes, which is not true;
+#Tied = All gaussians share the same covariance matrix, which is not true;
+#Diagonal = Assumes the features are independent from each other, may be interesting
+#Full = Everyone has it's own covariance matrix
 
 n_estimators = len(estimators)
 
