@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore')
 #cmap = plt.get_cmap('inferno')
 
 #data = pd.read_csv('../data_all.csv')
-data = pd.read_csv('../data_reagge_hiphop.csv')
+data = pd.read_csv('../data_feat.csv')
 data.head()
            
 labels = np.unique(data['label'])
