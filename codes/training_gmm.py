@@ -33,7 +33,9 @@ warnings.filterwarnings('ignore')
 
 data = pd.read_csv('../data_feat.csv')
 data.head()
-            
+           
+labels = np.unique(data['label'])
+ 
 #data.shape
 
 #Initialization of seeds to reproduce results
@@ -90,10 +92,21 @@ for index, (name, estimator) in enumerate(estimators.items()):
     y_test_pred = estimator.predict(X_test)
     test_accuracy = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100
 
-    conf_mat = 100*confusion_matrix(y_test,y_test_pred)/(0.2*np.size(data,0))
+    conf_mat = 100*confusion_matrix(y_test_pred,y_test)/(0.2*np.size(data,0))
 
     print("Confusion Matrix with cov =", estimator.covariance_type ,"in %\n", conf_mat)
 
-    total_acc = np.trace(conf_mat)
+    val_acc = np.trace(conf_mat)
 
-    print("Test accuracy with cov =", estimator.covariance_type ,"\n" , total_acc , "%")
+    print("Test accuracy with cov =", estimator.covariance_type ,"\n" , val_acc , "%")
+    
+    
+    y_total = estimator.predict(X)
+    conf_mat_total = confusion_matrix(y_total,y)
+    total_acc = np.trace(conf_mat)
+    
+    output = pd.DataFrame(conf_mat_total)
+    output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='columns')
+    output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='index')
+    
+    output.to_csv (r'../conf_matrix_GMM.csv', index = True, header=True)

@@ -17,9 +17,11 @@ import pathlib
 import csv
 import tensorflow as tf
 import random
+
 # Preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.metrics import confusion_matrix
 
 # Keras
 from keras import models
@@ -37,6 +39,8 @@ random.seed(seed_init)
 
 data = pd.read_csv('../data_feat.csv')
 data.head()
+
+labels = np.unique(data['label'])
             
 #data.shape
 
@@ -98,6 +102,20 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
+
+
+y_total = model.predict(X)
+
+y_total = np.argmax(y_total,axis=1)
+
+conf_mat_total = confusion_matrix(y_total,y)
+total_acc = np.trace(conf_mat)
+    
+output = pd.DataFrame(conf_mat_total)
+output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='columns')
+output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='index')
+
+export_csv = output.to_csv (r'../conf_matrix_FFNN.csv', index = True, header=True)
 
 #predictions = model.predict(X_test)
 #
