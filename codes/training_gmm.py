@@ -6,24 +6,14 @@ Created on Mon Oct 14 10:03:55 2019
 @author: Pedro, Rodrigo, Alix
 """
 
-import librosa
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 import random
 # matplotlib inline
-import os
-from PIL import Image
-import pathlib
-import csv
 
-from sklearn import datasets
-from sklearn.externals.six.moves import xrange
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.mixture import GaussianMixture
-from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix
 
 import warnings
@@ -31,7 +21,8 @@ warnings.filterwarnings('ignore')
 
 #cmap = plt.get_cmap('inferno')
 
-data = pd.read_csv('../data_feat.csv')
+#data = pd.read_csv('../data_all.csv')
+data = pd.read_csv('../data_reagge_hiphop.csv')
 data.head()
            
 labels = np.unique(data['label'])

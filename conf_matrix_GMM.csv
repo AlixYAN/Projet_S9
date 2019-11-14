@@ -1,11 +1,3 @@
-,blues,classical,country,disco,hiphop,jazz,metal,pop,reggae,rock
-blues,8,0,11,1,3,22,1,5,7,7
-classical,5,67,11,0,0,22,0,1,1,3
-country,10,3,13,7,0,4,12,21,1,25
-disco,6,1,8,40,19,2,30,27,4,7
-hiphop,1,1,2,2,54,0,3,16,13,1
-jazz,16,18,16,1,1,26,0,3,4,7
-metal,1,0,0,5,9,0,3,1,12,0
-pop,16,0,11,19,4,1,17,10,5,18
-reggae,27,4,1,16,8,10,17,8,42,9
-rock,10,6,27,9,2,13,17,8,11,23
+,hiphop,reggae
+hiphop,76,26
+reggae,24,74

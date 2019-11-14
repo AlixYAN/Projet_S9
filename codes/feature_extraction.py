@@ -8,25 +8,11 @@ Created on Mon Oct 14 09:09:46 2019
 
 # feature extractoring and preprocessing data
 import librosa
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import essentia
 import essentia.standard as es
 # matplotlib inline
 import os
-from PIL import Image
-import pathlib
 import csv
-import scipy.stats
-
-# Preprocessing
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-
-#Keras
-from keras import models
-from keras import layers
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -48,25 +34,35 @@ warnings.filterwarnings('ignore')
 #        
 
 #header = 'filename chroma_stft spectral_centroid spectral_bandwidth rolloff zero_crossing_rate tempo'
-header  = 'filename bpm danceability pitch_salience'
+header  = 'filename zcr bpm danceability pitch_salience'
 n_mfcc = 1
+n_gfcc = 1
 for i in range(1, n_mfcc+1):
     header += f' mfcc{i}'
+#for i in range(1, n_gfcc+1):
+#    header += f' gfcc{i}'
 header += ' label'
 header = header.split()
 
-file = open('../data_feat.csv', 'w', newline='')
+#file = open('../data_all.csv', 'w', newline='')
+
+file = open('../data_reagge_hiphop.csv', 'w', newline='')
 with file:
     writer = csv.writer(file)
     writer.writerow(header)
     
-genres = 'blues classical country disco hiphop jazz metal pop reggae rock'.split()
+#genres = 'blues classical country disco hiphop jazz metal pop reggae rock'.split()
 
-#genres = 'reggae hiphop'.split()
+genres = 'reggae hiphop'.split()
 
 #Using Reggae and HipHop because of higher confusion rate!
 
-#We tried using this feature, but the result is not satisfying 
+#Create the objects to extract features using Essentia
+sr = 22050
+spectrum_extractor = es.Spectrum()
+danceability_extractor = es.Danceability(sampleRate=sr)
+pitch_salience_extractor = es.PitchSalience(sampleRate=sr)
+#gfcc_extractor = es.GFCC(numberCoefficients=n_gfcc, sampleRate=sr, highFrequencyBound = sr/2)
 
 
 for g in genres:
@@ -78,7 +74,7 @@ for g in genres:
 #        spec_cent = librosa.feature.spectral_centroid(y=y, sr=sr)
 #        spec_bw = librosa.feature.spectral_bandwidth(y=y, sr=sr)
 #        rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
-#        zcr = librosa.feature.zero_crossing_rate(y)
+        zcr = librosa.feature.zero_crossing_rate(y)
         mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
 #       Add TEMPO features
 #        onset_env = librosa.onset.onset_strength(y, sr=sr)
@@ -92,7 +88,6 @@ for g in genres:
         if(np.size(audio,0)%2!=0):
             audio = audio[:-1]
             
-        spectrum_extractor = es.Spectrum()
         spectrum = spectrum_extractor(audio)
         
 #        We use BPM to extract rythm features, the main beat of the song
@@ -100,13 +95,13 @@ for g in genres:
         bpm, _, _, _, beats_intervals = rhythm_extractor(audio)
 
 #        Detrended Fluctuation Analysis of Music Signals
-        danceability_extractor = es.Danceability(sampleRate=sr)
         danceability,_ = danceability_extractor(audio)
 
 #        We use pitch salience to check the correlation of the song, i.e if the song is similar to
 #        itself in the extract we have. Repeating songs will have higher values of pitch salience
-        pitch_salience_extractor = es.PitchSalience(sampleRate=sr)
         pitch_salience = pitch_salience_extractor(spectrum)
+        
+#        _,gfcc = gfcc_extractor(spectrum)
         
 #        hfc_extract = es.HFC(sampleRate=sr)
 #        hfc = hfc_extract(spectrum)
@@ -116,12 +111,17 @@ for g in genres:
 
 #        to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)} {np.mean(tempo)} {np.mean(utempo)}'    
         
-        to_append = f'{filename} {np.mean(bpm)} {np.mean(danceability)} {np.mean(pitch_salience)}'  
+        to_append = f'{filename} {np.mean(zcr)} {np.mean(bpm)} {np.mean(danceability)} {np.mean(pitch_salience)}'  
         
         for e in mfcc:
             to_append += f' {np.mean(e)}'
+        
+#        for e in gfcc:
+#            to_append += f' {np.mean(e)}'
         to_append += f' {g}'
-        file = open('../data_feat.csv', 'a', newline='')
+        
+#       file = open('../data_all.csv', 'a', newline='')
+        file = open('../data_reagge_hiphop.csv', 'a', newline='')
         with file:
             writer = csv.writer(file)
             writer.writerow(to_append.split())

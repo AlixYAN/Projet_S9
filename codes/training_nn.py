@@ -6,15 +6,10 @@ Created on Mon Oct 14 10:03:55 2019
 @author: Pedro, Rodrigo, Alix
 """
 
-import librosa
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 # matplotlib inline
-import os
-from PIL import Image
-import pathlib
-import csv
 import tensorflow as tf
 import random
 
@@ -37,7 +32,8 @@ tf.set_random_seed(seed_init)
 np.random.seed(seed_init)
 random.seed(seed_init)
 
-data = pd.read_csv('../data_feat.csv')
+#data = pd.read_csv('../data_all.csv')
+data = pd.read_csv('../data_reagge_hiphop.csv')
 data.head()
 
 labels = np.unique(data['label'])
@@ -109,7 +105,7 @@ y_total = model.predict(X)
 y_total = np.argmax(y_total,axis=1)
 
 conf_mat_total = confusion_matrix(y_total,y)
-total_acc = np.trace(conf_mat)
+total_acc = np.trace(conf_mat_total)
     
 output = pd.DataFrame(conf_mat_total)
 output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='columns')
