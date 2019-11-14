@@ -85,7 +85,7 @@ for i = 1:num_frames
 	% direct translation of marsyas C++
 	factor2 = 0.5;
 	factor4 = 0.25;
-	stretched = zeros( 1,Hn M );
+	stretched = zeros( 1, M );
 	for t = 0:M-1
 		ni = t*factor2;
 		li = fix(ni); % numSamples
