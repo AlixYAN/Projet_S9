@@ -21,16 +21,15 @@ warnings.filterwarnings('ignore')
 
 #cmap = plt.get_cmap('inferno')
 
-#data = pd.read_csv('../data_all.csv')
-data = pd.read_csv('../data_feat.csv')
-data.head()
+data = pd.read_csv('../features_csv/data_all.csv')
+#data = pd.read_csv('../features_csv/data_reagge_hiphop.csv')
            
 labels = np.unique(data['label'])
  
 #data.shape
 
 #Initialization of seeds to reproduce results
-seed_init = 100
+seed_init = 1
 np.random.seed(seed_init)
 random.seed(seed_init)
 
@@ -57,7 +56,7 @@ n_classes = len(np.unique(y_train))
 # Try GMMs using different types of covariances.
 estimators = {cov_type: GaussianMixture(n_components=n_classes,
               covariance_type=cov_type, max_iter=20, random_state=0)
-              for cov_type in ['diag', 'full']}
+              for cov_type in ['full']}
 
 #Spherical = variance is the same along all axes, which is not true;
 #Tied = All gaussians share the same covariance matrix, which is not true;
@@ -75,29 +74,29 @@ for index, (name, estimator) in enumerate(estimators.items()):
     # Train the other parameters using the EM algorithm.
     estimator.fit(X_train)
 
-    genres = np.unique(genre_list)
-
     y_train_pred = estimator.predict(X_train)
-    train_accuracy = np.mean(y_train_pred.ravel() == y_train.ravel()) * 100
+    accuracy_train = np.mean(y_train_pred.ravel() == y_train.ravel()) * 100
 
     y_test_pred = estimator.predict(X_test)
-    test_accuracy = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100
-
-    conf_mat = 100*confusion_matrix(y_test_pred,y_test)/(0.2*np.size(data,0))
-
-    print("Confusion Matrix with cov =", estimator.covariance_type ,"in %\n", conf_mat)
-
-    val_acc = np.trace(conf_mat)
-
-    print("Test accuracy with cov =", estimator.covariance_type ,"\n" , val_acc , "%")
+    accuracy_test = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100   
     
     
+    # We apply now the trained model to the whole data to see how it behaves
     y_total = estimator.predict(X)
-    conf_mat_total = confusion_matrix(y_total,y)
-    total_acc = np.trace(conf_mat)
     
+    # To visualize the result, we have a confusion matrix
+    conf_mat_total = confusion_matrix(y_total,y)
+    
+    # We calculate the accuracy using the diagonal of the confusion matrix (the songs that were correctly classified)
+    accuracy_total_prediction = 100*np.trace(conf_mat_total)/np.size(data,0)
+    
+    # We save the confusion matrix as an CSV output
     output = pd.DataFrame(conf_mat_total)
     output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='columns')
     output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='index')
     
-    output.to_csv (r'../conf_matrix_GMM.csv', index = True, header=True)
+    output.to_csv (r'../confusion_matrices/conf_matrix_GMM.csv', index = True, header=True)
+    
+    # Print the result to visualize in Spyder environement
+    print(output)
+    print("Total accuracy = ", accuracy_total_prediction, "%")

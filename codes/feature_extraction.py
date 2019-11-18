@@ -34,9 +34,9 @@ warnings.filterwarnings('ignore')
 #        
 
 #header = 'filename chroma_stft spectral_centroid spectral_bandwidth rolloff zero_crossing_rate tempo'
-header  = 'filename zcr bpm danceability pitch_salience'
+header  = 'filename bpm danceability pitch_salience'
 n_mfcc = 1
-n_gfcc = 1
+#n_gfcc = 1
 for i in range(1, n_mfcc+1):
     header += f' mfcc{i}'
 #for i in range(1, n_gfcc+1):
@@ -44,16 +44,16 @@ for i in range(1, n_mfcc+1):
 header += ' label'
 header = header.split()
 
-#file = open('../data_all.csv', 'w', newline='')
+file = open('../features_csv/data_all.csv', 'w', newline='')
 
-file = open('../data_reagge_hiphop.csv', 'w', newline='')
+#file = open('../features_csv/data_reagge_hiphop.csv', 'w', newline='')
 with file:
     writer = csv.writer(file)
     writer.writerow(header)
     
-#genres = 'blues classical country disco hiphop jazz metal pop reggae rock'.split()
+genres = 'blues classical country disco hiphop jazz metal pop reggae rock'.split()
 
-genres = 'reggae hiphop'.split()
+#genres = 'reggae hiphop'.split()
 
 #Using Reggae and HipHop because of higher confusion rate!
 
@@ -68,14 +68,14 @@ pitch_salience_extractor = es.PitchSalience(sampleRate=sr)
 for g in genres:
     for filename in os.listdir(f'../dataset/{g}'):
         songname = f'../dataset/{g}/{filename}'
-        y, sr = librosa.load(songname, mono=True, duration=30)
-        audio = es.MonoLoader(filename=songname)() # Load song for ESSENTIA
+#        audio, _ = librosa.load(songname, mono=True, duration=30)
+        audio = es.MonoLoader(filename=songname,sampleRate=sr)() # Load song to use ESSENTIA library
 #        chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
 #        spec_cent = librosa.feature.spectral_centroid(y=y, sr=sr)
 #        spec_bw = librosa.feature.spectral_bandwidth(y=y, sr=sr)
 #        rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
-        zcr = librosa.feature.zero_crossing_rate(y)
-        mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
+#        zcr = librosa.feature.zero_crossing_rate(y)
+        mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
 #       Add TEMPO features
 #        onset_env = librosa.onset.onset_strength(y, sr=sr)
 #        tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)
@@ -111,7 +111,7 @@ for g in genres:
 
 #        to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)} {np.mean(tempo)} {np.mean(utempo)}'    
         
-        to_append = f'{filename} {np.mean(zcr)} {np.mean(bpm)} {np.mean(danceability)} {np.mean(pitch_salience)}'  
+        to_append = f'{filename} {np.mean(bpm)} {np.mean(danceability)} {np.mean(pitch_salience)}'  
         
         for e in mfcc:
             to_append += f' {np.mean(e)}'
@@ -120,8 +120,8 @@ for g in genres:
 #            to_append += f' {np.mean(e)}'
         to_append += f' {g}'
         
-#       file = open('../data_all.csv', 'a', newline='')
-        file = open('../data_reagge_hiphop.csv', 'a', newline='')
+        file = open('../features_csv/data_all.csv', 'a', newline='')
+#        file = open('../features_csv/data_reagge_hiphop.csv', 'a', newline='')
         with file:
             writer = csv.writer(file)
             writer.writerow(to_append.split())
