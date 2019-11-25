@@ -33,6 +33,9 @@ genre_list = data.iloc[:, -1]
 encoder = LabelEncoder()
 y = encoder.fit_transform(genre_list)
 
+scaler = StandardScaler()
+X = scaler.fit_transform(np.array(data.iloc[:, :-1], dtype = float))
+
 conf_mat_total = []
 
 for seed_init in range(100):
@@ -40,9 +43,6 @@ for seed_init in range(100):
     #Initialization of seeds to reproduce results
     np.random.seed(seed_init)
     random.seed(seed_init)
-    
-    scaler = StandardScaler()
-    X = scaler.fit_transform(np.array(data.iloc[:, :-1], dtype = float))
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     
