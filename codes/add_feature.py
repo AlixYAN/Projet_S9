@@ -12,26 +12,24 @@ import essentia.standard as es
 
 # Read the csv file which you want to add a new feature to avoid recalculation 
 # of all the parameters
-data = pd.read_csv('../features_csv/data_reagge_hiphop.csv')
+data_new = pd.read_csv('../features_csv/data_selected.csv')
 
-data_new = data
-
-genres = data['label']
-songs = data['filename']
+genres = data_new['label']
+songs = data_new['filename']
 
 sr = 22050
 
-#Constructor of the extractor Essentia
-zcr_extractor = es.ZeroCrossingRate()
-zcr = []
+#Constructor of the new feature extractor Essentia
 
-for i in np.arange(np.size(data,0)):
+
+for i in np.arange(np.size(data_new,0)):
     g = genres[i]
     filename = songs[i]
     songname = f'../dataset/{g}/{filename}'
     audio = es.MonoLoader(filename=songname,sampleRate=sr)()
         
     # Put the feature you want to add here!
-    zcr.append(zcr_extractor(audio))
-        
-data_new.insert(np.size(data_new,1)-1,"Zcr",zcr,True)
+
+data_new.insert(np.size(data_new,1)-1,"name",name,True)
+
+data_new.to_csv(r'../features_csv/data_selected_2.csv', index = False, header=True)

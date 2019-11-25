@@ -27,13 +27,13 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #Seeds Initialization to reproduce results!
-seed_init = 20
+seed_init = 10
 tf.set_random_seed(seed_init)
 np.random.seed(seed_init)
 random.seed(seed_init)
 
 #data = pd.read_csv('../data_all.csv')
-data = pd.read_csv('../data_feat.csv')
+data = pd.read_csv('../features_csv/data_selected_3.csv')
 
 labels = np.unique(data['label'])
             
@@ -104,13 +104,16 @@ y_total = model.predict(X)
 y_total = np.argmax(y_total,axis=1)
 
 conf_mat_total = confusion_matrix(y_total,y)
-total_acc = np.trace(conf_mat_total)
+total_acc = 100*np.trace(conf_mat_total)/np.size(data,0)
     
 output = pd.DataFrame(conf_mat_total)
 output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='columns')
 output = output.rename({idx:labels[idx] for idx in range(np.size(labels))},axis='index')
 
-export_csv = output.to_csv (r'../conf_matrix_FFNN.csv', index = True, header=True)
+export_csv = output.to_csv (r'../confusion_matrices/conf_matrix_FFNN.csv', index = True, header=True)
+
+print(output)
+print("Total accuracy = ", total_acc, "%")
 
 #predictions = model.predict(X_test)
 #
