@@ -43,7 +43,7 @@ cmap = plt.get_cmap('inferno')
 #        plt.savefig(f'img_data/{g}/{filename[:-3].replace(".", "")}.png')
 #        plt.clf()
 
-header = 'filename chroma_stft rmse spectral_centroid spectral_bandwidth rolloff zero_crossing_rate tempo utempo'        
+header = 'filename chroma_stft rmse spectral_centroid spectral_bandwidth rolloff zero_crossing_rate tempo'        
 #header = 'filename chroma_stft tempo'
 n_mfcc = 10
 for i in range(1, n_mfcc+1):
@@ -55,7 +55,8 @@ file = open('./data.csv', 'w', newline='')
 with file:
     writer = csv.writer(file)
     writer.writerow(header)
-genres = 'classical hiphop jazz reggae rock'.split()
+genres = 'hiphop reggae'.split()
+# genres = 'classical hiphop jazz reggae rock'.split()
 for g in genres:
     for filename in os.listdir(f'./genres/{g}'):
     #for filename in os.listdir(f'./fma_small/fma_small/{g}'):
@@ -77,7 +78,7 @@ for g in genres:
         #utempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)
         #utempo = utempo.item()
         
-        to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)} {np.mean(tempo)} {np.mean(utempo)}'
+        to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)} {np.mean(tempo)}'
         #to_append = f'{filename} {np.mean(chroma_stft)} {np.mean(tempo)}'
         for e in mfcc:
             to_append += f' {np.mean(e)}'

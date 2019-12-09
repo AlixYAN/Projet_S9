@@ -37,16 +37,14 @@ labels = np.unique(data['label'])
 
 # Dropping unneccesary columns
 data = data.drop(['filename'],axis=1)
-#data = data.drop(['chroma_stft'],axis=1)
-data = data.drop(['rmse'],axis=1)
-#data = data.drop(['spectral_centroid'],axis=1)
+data = data.drop(['chroma_stft'],axis=1)
+#data = data.drop(['rmse'],axis=1)
+data = data.drop(['spectral_centroid'],axis=1)
 data = data.drop(['spectral_bandwidth'],axis=1)
 data = data.drop(['rolloff'],axis=1)
 data = data.drop(['zero_crossing_rate'],axis=1)
 data = data.drop(['tempo'],axis=1)
-data = data.drop(['utempo'],axis=1)
 
-#{np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)} {np.mean(tempo)} {np.mean(utempo)}'
 
 genre_list = data.iloc[:, -1]
 encoder = LabelEncoder()
@@ -88,11 +86,17 @@ for i in range(10) :
     #
     #print('test_acc: ',test_acc)
     
-    x_val = X_train[:200]
-    partial_x_train = X_train[200:]
+    x_val = X_train[:80]
+    partial_x_train = X_train[80:]
     
-    y_val = y_train[:200]
-    partial_y_train = y_train[200:]
+    y_val = y_train[:80]
+    partial_y_train = y_train[80:]
+    
+    #x_val = X_train[:200]
+    #partial_x_train = X_train[200:]
+    
+    #y_val = y_train[:200]
+    #partial_y_train = y_train[200:]
     
     model = models.Sequential()
     model.add(layers.Dense(512, activation='relu', input_shape=(X_train.shape[1],)))
@@ -141,8 +145,8 @@ for i in range(10) :
     if i == 0:
         conf_mat_total = conf_mat 
     else:
-        for j in range(4):
-            for k in range(4):
+        for j in range(2):
+            for k in range(2):
                  conf_mat_total[j][k] = float(conf_mat_total[j][k]*i + conf_mat[j][k])/float(i+1)
     
     total_acc = np.trace(conf_mat_total)
@@ -154,12 +158,12 @@ for i in range(10) :
     export_csv = output.to_csv (r'../conf_matrix_FFNN.csv', index = True, header=True)
 
 
-    for clabel in range(5) :
-        plt.plot(data['chroma_stft'][clabel*100:99+clabel*100], data['spectral_centroid'][clabel*100:99+clabel*100], 'x')
-        plt.ylabel('Spec Cent')
-        plt.xlabel('Chroma STFT')
-    plt.legend(['Classical', 'HipHop', 'Jazz', 'Reggae', 'Rock'], loc='upper left')
-    plt.show()
+#    for clabel in range(5) :
+#        plt.plot(data['chroma_stft'][clabel*100:99+clabel*100], data['spectral_centroid'][clabel*100:99+clabel*100], 'x')
+#        plt.ylabel('Spec Cent')
+#        plt.xlabel('Chroma STFT')
+#    plt.legend(['Classical', 'HipHop', 'Jazz', 'Reggae', 'Rock'], loc='upper left')
+#    plt.show()
 
 
 #predictions = model.predict(X_test)
