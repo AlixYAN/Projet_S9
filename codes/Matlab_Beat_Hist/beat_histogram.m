@@ -133,5 +133,3 @@ for i = 1:num_frames
 	% translate matlab-style indices into BPM
 	bh_cands(i,:) = (best-1.0) / 4.0;
 end
-
-

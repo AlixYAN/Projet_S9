@@ -26,7 +26,7 @@ for i in range(1, n_mfcc+1):
 header += ' label'
 header = header.split()
 
-file = open('../features_csv/data_selected_3.csv', 'w', newline='')
+file = open('../features_csv/data_selected.csv', 'w', newline='')
 
 #file = open('../features_csv/data_reggae_hiphop.csv', 'w', newline='')
 with file:

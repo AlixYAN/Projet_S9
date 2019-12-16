@@ -2,15 +2,6 @@ clear
 close all
 clc
 
-data = importfile_data('../../data.csv')
-
-varTypes = {'double', 'double', 'double', 'double', 'double', 'double'};
-varNames = {'A0','A1','RA','P1','P2','SUM'};
-data2 = table('Size',[size(data,1),6],'VariableTypes',varTypes,'VariableNames',varNames);
-label_vector = data(:,end);
-data = data(:,1:end-1);
-data = [data data2 label_vector];
-
 for i=1:size(data,1)
 filename = ['../../dataset/',char(table2array(label_vector(i,1))),'/',char(table2array(data(i,1)))];
 Beat_hist = tempo_stem_file(filename);
