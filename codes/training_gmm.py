@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 
 #cmap = plt.get_cmap('inferno')
 
-data = pd.read_csv('../features_csv/data_reggae_hiphop.csv')
+data = pd.read_csv('../features_csv/data_selected.csv')
 #data = pd.read_csv('../features_csv/data_reagge_hiphop.csv')
            
 labels = np.unique(data['label'])

@@ -22,13 +22,18 @@ from sklearn.metrics import confusion_matrix
 from keras import models
 from keras import layers
 from keras import optimizers
+from keras.layers import Dropout
 
 import warnings
 warnings.filterwarnings('ignore')
 
 
 #data = pd.read_csv('../data_all.csv')
-data = pd.read_csv('../features_csv/data_reggae_hiphop.csv')
+data = pd.read_csv('../features_csv/data_selected.csv')
+
+data = data[data.label != 'classical']
+data = data[data.label != 'jazz']
+
 
 labels = np.unique(data['label'])
             
@@ -46,9 +51,10 @@ X = scaler.fit_transform(np.array(data.iloc[:, :-1], dtype = float))
 
 conf_mat_total = []
 conf_mat_test_total = []
+val_acc_p = 0 # Previous val_acc
 
-#Seeds Initialization to reproduce results!
-for seed_init in range(100):
+# Seeds Initialization to reproduce results!
+for seed_init in range(10):
 
     tf.set_random_seed(seed_init)
     np.random.seed(seed_init)
@@ -66,9 +72,18 @@ for seed_init in range(100):
     
         model = models.Sequential()
         model.add(layers.Dense(512, activation='relu', input_shape=(X_train.shape[1],)))
-        #model.add(layers.Dense(256, activation='relu'))
-        #model.add(layers.Dense(128, activation='relu'))
-        #model.add(layers.Dense(64, activation='relu'))
+#        model.add(Dropout(0.2))
+        model.add(layers.Dense(256, activation='relu'))
+#        model.add(Dropout(0.2))
+#        model.add(layers.Dense(128, activation='relu'))
+#        model.add(Dropout(0.2))
+        model.add(layers.Dense(128, activation='relu'))
+#        model.add(Dropout(0.2))
+        model.add(layers.Dense(64, activation='relu'))
+#        model.add(Dropout(0.2))
+#        model.add(layers.Dense(64, activation='relu'))
+#        model.add(Dropout(0.2))
+        model.add(layers.Dense(32, activation='relu'))
         model.add(layers.Dense(n_classes, activation='softmax'))
         
         opt = optimizers.Adam(lr = 0.0001, beta_1 = 0.9, beta_2 = 0.999, amsgrad = False)
@@ -79,12 +94,16 @@ for seed_init in range(100):
         
         history = model.fit(X_train,
                             y_train,
-                            epochs=20,
-                            batch_size=32,
+                            epochs=30,
+                            batch_size=64,
                             validation_data=(X_test, y_test))
         
         results = model.evaluate(X_test, y_test)
-    
+        
+        if (results[1] > val_acc_p):
+            d_model = model
+            val_acc_p = results[1]
+        
     #    # Plot training & validation accuracy values
     #    plt.plot(history.history['acc'])
     #    plt.plot(history.history['val_acc'])
@@ -143,10 +162,11 @@ output_var.to_csv (r'../confusion_matrices/conf_matrix_var_GMM.csv', index = Tru
 print(output_mean)
 print("Total accuracy = ", accuracy_test_total_prediction, "%")
 
-#predictions = model.predict(X_test)
-#
-#print(predictions[0].shape)
-#
-#print(np.sum(predictions[0]))
-#
-#print(np.argmax(predictions[0]))
+# Save the definitive model
+# Serialize model to JSON
+model_json = d_model.to_json()
+with open("../models/model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+d_model.save_weights("../models/model.h5")
+print("Saved model to disk")
