@@ -23,7 +23,7 @@ panel.grid(row=0,column=2, columnspan =4, rowspan = 4)
 def open_file():
     global songname
     global classification
-    file = askopenfilename(initialdir = '/home/rodrigo/Music',filetypes = [('Song Files','*.wav, *.au')])
+    file = askopenfilename(initialdir = '/home/rodrigo/Music',filetypes = [('Song Files','*.wav, *.au, *.mp3')])
     if file != '':
         songname = file
         name = songname.split('/')[-1]
