@@ -17,6 +17,7 @@ import random
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.metrics import confusion_matrix
+from sklearn.externals import joblib
 
 # Keras
 from keras import models
@@ -48,6 +49,10 @@ y = encoder.fit_transform(genre_list)
 
 scaler = StandardScaler()
 X = scaler.fit_transform(np.array(data.iloc[:, :-1], dtype = float))
+
+#Save the scaler
+scaler_filename = '../models/scaler.save'
+joblib.dump(scaler,scaler_filename)
 
 conf_mat_total = []
 conf_mat_test_total = []

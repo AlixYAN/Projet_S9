@@ -5,7 +5,7 @@ import librosa
 import warnings
 warnings.filterwarnings('ignore')
 
-def classify_nn(loaded_model,audio,sr):
+def classify_nn(scaler,loaded_model,audio,sr):
 
     spec_cent = librosa.feature.spectral_centroid(y=audio, sr=sr)
     rmse = librosa.feature.rms(y=audio)
@@ -34,12 +34,16 @@ def classify_nn(loaded_model,audio,sr):
     param = np.transpose(param)
     param = param.reshape(1,-1)
 
+    param = scaler.transform(param)
+
     result = loaded_model.predict(param)
 
-    if result[0][0] == 1:
+    result = np.argmax(result,axis=1)
+
+    if result == 0:
         label = 'Hiphop'
         idx = 2
-    elif result[0][1] == 1:
+    elif result == 1:
         label = 'Reggae'
         idx = 3
     else:

@@ -4,6 +4,7 @@ import librosa
 
 from keras import optimizers
 from keras.models import model_from_json
+from sklearn.externals import joblib
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -39,6 +40,10 @@ def classify_nn(songname):
     param = np.transpose(param)    
     param = param.reshape(1,-1)
     
+    scaler = joblib.load('../models/scaler.save')
+    
+    param = scaler.transform(param)
+    
     # load json and create model
     json_file = open('../models/model.json', 'r')
     loaded_model_json = json_file.read()
@@ -55,11 +60,13 @@ def classify_nn(songname):
         
     result = loaded_model.predict(param)
     
-    if result[0][0] == 1:
+    result = np.argmax(result,axis=1)
+    
+    if result == 0:
         label = 'Hiphop'
-    elif result[0][1] == 1:
+    elif result == 1:
         label = 'Reggae'
     else:
         label = 'Rock'
     
-    return label
+    return result

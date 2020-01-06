@@ -6,7 +6,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras import regularizers
 from tensorflow.keras.optimizers import SGD
 import tensorflow.keras.backend as K
-from tensorflow.keras.models import load_model
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import classification_report, confusion_matrix
 
@@ -26,6 +25,8 @@ warnings.filterwarnings('ignore')
 from classification_nn import classify_nn
 from keras import optimizers
 from keras.models import model_from_json
+from tensorflow.keras.models import load_model
+from sklearn.externals import joblib
 
 def resize_ps(ps):
     resize_ps = np.zeros((128, 600))
@@ -78,6 +79,8 @@ def classify_song(filename_in):
     loaded_model.load_weights("../models/model.h5")
     print("Loaded model from disk")
 
+    scaler = joblib.load('../models/scaler.save')
+
     opt = optimizers.Adam(lr = 0.0001, beta_1 = 0.9, beta_2 = 0.999, amsgrad = False)
     loaded_model.compile(optimizer=opt,
                          loss='sparse_categorical_crossentropy',
@@ -90,16 +93,16 @@ def classify_song(filename_in):
     for i in range(num_tracks):
         idx = classify_model1(m1,list_tracks[i][0],list_tracks[i][1])
         if idx == 2:
-            idx = classify_nn(loaded_model,list_tracks[i][0],list_tracks[i][1])
+            idx = classify_nn(scaler,loaded_model,list_tracks[i][0],list_tracks[i][1])
         list_result.append(idx)
         list_result_count = [list_result.count(0),list_result.count(1),list_result.count(2),list_result.count(3),list_result.count(4)]
         percent_result = 100*np.divide(list_result_count,num_tracks)
-    
+
     if num_tracks == 0:
         final = 'Impossible to classify, too short'
     else:
         final = 'Classical: {:.2f}%, Jazz: {:.2f}%, Hiphop: {:.2f}%, Reggae: {:.2f}%, Rock: {:.2f}%'.format(percent_result[0],percent_result[1],percent_result[2],percent_result[3],percent_result[4])
-    
+
     os.remove(filename_out)
     return final
     #     class_pred_idx = np.argmax(list_result_count)
@@ -114,5 +117,5 @@ def classify_song(filename_in):
     # elif class_pred_idx == 4 :
     #     class_pred = 'Rock'
     # return class_pred
-filename = '/home/rodrigo/Documents/ENSEIRB/S9/Projet_S9/dataset/rock/rock.00009.au'
+filename = '/home/rodrigo/Documents/ENSEIRB/S9/Projet_S9/dataset/hiphop/hiphop.00080.au'
 result = classify_song(filename)
