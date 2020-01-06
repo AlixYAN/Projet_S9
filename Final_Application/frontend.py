@@ -8,11 +8,12 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from PIL import ImageTk, Image
 import os
+from classification_cnn import classify_song
 #Create Window Object
 
 window =Tk()
 window.title('Genre Classifier')
-window.geometry('600x125')
+window.geometry('1000x125')
 img = Image.open("note.png")
 newsize=(100,100)
 img = img.resize(newsize)
@@ -33,11 +34,11 @@ def open_file():
         name = songname.split('/')[-1]
         l1.config(text='Name: '+name)
 
-def classify_song(songname):
+def classify_total(songname):
     if songname is not None:
         #classification = CODE(songname)
-        #PLACE CODE TO CLASSIFY HERE!!!
-        l2.config(text = 'Genre: ')
+        result = classify_song(songname)
+        l2.config(text = 'Genres: '+result)
 
 btn_choose = Button(window, text="Choose song to classify",width=20, command = lambda:open_file())
 btn_choose.grid(row=1,sticky=W)
@@ -48,10 +49,10 @@ except NameError: songname = None
 l1 = Label(window,text= 'Name: No song selected',width=40)
 l1.grid(row=1,column=1)
 
-btn_clas = Button(window, text='Classify',width=20, command = lambda:classify_song(songname))
+btn_clas = Button(window, text='Classify',width=20, command = lambda:classify_total(songname))
 btn_clas.grid(row=3,sticky=W)
 #
-l2 = Label(window,text= 'Genre: None',width=20)
+l2 = Label(window,text= 'Genre: None',width=100)
 l2.grid(row=3,column=1)
 
 btn_quit = Button (window, text = "Quit Classifier.", command = close_window)
