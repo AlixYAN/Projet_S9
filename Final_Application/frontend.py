@@ -12,8 +12,11 @@ from classification_cnn import classify_song
 #Create Window Object
 
 window =Tk()
+
+window.tk.call('wm', 'iconphoto', window._w, PhotoImage(file='note.png'))
+
 window.title('Genre Classifier')
-window.geometry('1000x125')
+window.geometry('1000x170')
 img = Image.open("note.png")
 newsize=(100,100)
 img = img.resize(newsize)
@@ -33,6 +36,7 @@ def open_file():
         songname = file
         name = songname.split('/')[-1]
         l1.config(text='Name: '+name)
+        l2.config(text = 'Genres: ')
 
 def classify_total(songname):
     if songname is not None:
