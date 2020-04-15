@@ -61,14 +61,12 @@ Example of the utilization of the interface:
 
 #### Install the necessary dependecies
 
-- If the MEX do not work for you, make sure you have a C/C++ compiler and run
-
 ```
-run SETUP.m    %build the MEX for the SO;
+pip install -r requirements.txt
 ```
 
 ##### To train
-Download the [dataset](opihi.cs.uvic.ca/sound/genres.tar.gz)
+Download the [dataset](http://opihi.cs.uvic.ca/sound/genres.tar.gz)
 
 Train the CNN:
 ```
@@ -91,7 +89,7 @@ python frontend.py
 ### Contributors, Contact and License
 
 Abdelkarim Elassam,  2019  
-abdelkarimelassam@gmail.com
+abdelkarimelassam@gmail.com  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
 Alix Yan,  2019  
