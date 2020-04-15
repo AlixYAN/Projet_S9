@@ -88,23 +88,23 @@ python frontend.py
 
 ### Contributors, Contact and License
 
-Abdelkarim Elassam,  2019  
+Abdelkarim Elassam,  2020  
 abdelkarimelassam@gmail.com  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
-Alix Yan,  2019  
+Alix Yan,  2020  
 alix.yan@enseirb-matmeca.fr  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
-Marwa Tarchouli,  2019  
+Marwa Tarchouli,  2020  
 marwa.tarchouli@enseirb-matmeca.fr  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
-Pedro Caio Castro Cortes C Coutinho,  2019  
+Pedro Caio Castro Cortes C Coutinho,  2020  
 pedro.caio_castro_cortes_c_coutinho@bordeaux-inp.fr  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
-Rodrigo Borba Pinheiro,  2019  
+Rodrigo Borba Pinheiro,  2020  
 rodrigo.borba_pinheiro@bordeaux-inp.fr  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing  
 
