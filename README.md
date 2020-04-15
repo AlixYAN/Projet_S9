@@ -46,7 +46,7 @@ It has 2 main parts, the first classifies the genre using a CNN and the Mel-Spec
 
 Example of the utilization of the interface:
 
-![gif](./Figures/demo.gif)
+![gif](./Figures/out.gif)
 
 ### Requirements
 
