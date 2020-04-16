@@ -101,7 +101,7 @@ marwa.tarchouli@enseirb-matmeca.fr
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
 Pedro Caio Castro Cortes C Coutinho,  2020  
-pedro.caio_castro_cortes_c_coutinho@bordeaux-inp.fr  
+pedro_caio.castro_cortes_c_coutinho@bordeaux-inp.fr  
 ENSEIRB-MATMECA (Bordeaux INP), Electronic Engineering - Signal and Image Processing
 
 Rodrigo Borba Pinheiro,  2020  
