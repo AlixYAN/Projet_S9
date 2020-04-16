@@ -30,16 +30,16 @@ Inspired in the following papers and website:
 
 The classifier works as the following:
 
-![image](./Figures/Final_model.png)
+![image](./Figures/final_model.png)
 
 It has 2 main parts, the first classifies the genre using a CNN and the Mel-Spectogram and the second classifies using chosen features.
 
 ##### CNN
-![image](./Figures/CNN.png)
+![image](./Figures/cnn.png)
 
 ##### FFNN
 
-![image](./Figures/arch_FFNN.png)
+![image](./Figures/arch_ffnn.png)
 
 
 ##### Interface
@@ -68,6 +68,10 @@ pip install -r requirements.txt
 ##### To train
 Download the [dataset](http://opihi.cs.uvic.ca/sound/genres.tar.gz)
 
+Unzip in the project folder as a folder called 'dataset'.
+Make sure all the genres are there.
+The dataset folder should contain 10 folders, each with 100 songs.
+
 Train the CNN:
 ```
 TO MODIFY
@@ -75,7 +79,6 @@ TO MODIFY
 
 Train the FFNN (If you want, you can change the features used to train):
 ```
-cd codes
 python training_nn.py
 ```
 

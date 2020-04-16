@@ -22,7 +22,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-from classification_nn import classify_nn
+from classification_ffnn import classify_nn
 from keras import optimizers
 from keras.models import model_from_json
 from tensorflow.keras.models import load_model
@@ -69,14 +69,14 @@ def classify_song(filename_in):
     else:
         num_tracks = 0
     list_tracks = []
-    m1 = load_model('../models/music_genre_classification_95.h5')
+    m1 = load_model('../models/cnn.h5')
         # load json and create model
-    json_file = open('../models/model.json', 'r')
+    json_file = open('../models/ffnn.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     loaded_model = model_from_json(loaded_model_json)
     # load weights into new model
-    loaded_model.load_weights("../models/model.h5")
+    loaded_model.load_weights("../models/ffnn.h5")
     print("Loaded model from disk")
 
     scaler = joblib.load('../models/scaler.save')
@@ -117,5 +117,3 @@ def classify_song(filename_in):
     # elif class_pred_idx == 4 :
     #     class_pred = 'Rock'
     # return class_pred
-filename = '/home/rodrigo/Documents/ENSEIRB/S9/Projet_S9/dataset/hiphop/hiphop.00080.au'
-result = classify_song(filename)
