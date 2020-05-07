@@ -1,7 +1,7 @@
 # Automatic Genre Classifier
 
 ### Overview
-Project oriented by Pascal Vallet at ENSIRB-MATMECA:  
+Project oriented by Pascal Vallet at ENSEIRB-MATMECA:  
 Inspired in the following papers and website:
 ```
 @article{Tzatenakis,
